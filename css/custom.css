@@ -1,0 +1,12 @@
+#answers button{
+	width: 90px;
+}
+
+#answers{
+	text-align:center;
+}
+
+#answers ol li{
+	list-style:none;
+	line-height:50%;
+}

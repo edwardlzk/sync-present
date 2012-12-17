@@ -12,9 +12,16 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+		
+		<link rel="stylesheet" href="css/skeleton.css">
+		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/layout.css">
 
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+		
+
+		<link rel="stylesheet" href="css/custom.css">
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="css/zenburn.css">
 
@@ -89,10 +96,19 @@
 					</section>
 				</section>
 
+
 				<section>
 					<h2>Charts</h2>
 					<p>
-						<div id="test"></div>
+						<h4>What is your favorate programming language</h4>
+						<div id="answers">
+							<ol>
+							<li><button class="roll" onclick="sendResult(1,0)">PHP</button></li>
+							<li><button class="roll" onclick="sendResult(1,1)">Java</button></li>
+							<li><button class="roll" onclick="sendResult(1,2)">Python</button></li>
+							<li><button class="roll" onclick="sendResult(1,3)">C</button></li>
+							</ol>
+						</div>
 					</p>
 				</section>
 
@@ -378,6 +394,14 @@ function linkify( selector ) {
 				h = num[0];
 				v = num[1];
 				Reveal.slide( h, v, 0 );
+			});
+		}
+		
+		function sendResult(sid, aid){
+			var replaceText = "Thanks for your vote";
+			
+			$.get('/survey_vote?sid='+sid+'&aid='+aid, function(data) {
+				//$('#answers').replaceWith(replaceText)
 			});
 		}
 		
