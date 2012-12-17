@@ -35,6 +35,7 @@ class Survey(db.Model):
     atext = db.StringProperty();
     count = db.IntegerProperty();
 
+#Handles the server-side requests
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.generateSurvey()
@@ -52,12 +53,14 @@ class MainHandler(webapp2.RequestHandler):
             a2.put();
             a3.put();
             a4.put();
-        
+
+#Handles the client-side requests
 class Client(webapp2.RequestHandler):
     def get(self):
         path = os.path.join(os.path.dirname(__file__), 'client.html')
         self.response.out.write(template.render(path, None))        
 
+#Gives the current page of Server, used to synchronize between client and server
 class Status(webapp2.RequestHandler):
     def get(self):
         hindex = cgi.escape(self.request.get('h'))
@@ -66,7 +69,8 @@ class Status(webapp2.RequestHandler):
             memcache.set('hindex', hindex)
             memcache.set('vindex', vindex)
         self.response.out.write("%s %s"%(memcache.get('hindex'), memcache.get('vindex')))
-        
+
+#Handles a vote from clients
 class SurveyVote(webapp2.RequestHandler):
     def get(self):
         _sid = cgi.escape(self.request.get('sid'))
@@ -81,6 +85,7 @@ class SurveyVote(webapp2.RequestHandler):
         obj.count +=1
         obj.put()
 
+#generate survey results for server to display
 class Result(webapp2.RequestHandler):
     def get(self):
         _sid = cgi.escape(self.request.get('sid'))
