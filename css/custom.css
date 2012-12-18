@@ -1,5 +1,6 @@
 #answers button{
-	width: 90px;
+	width: 150px;
+	font-size: 40px;
 }
 
 #answers{
@@ -7,6 +8,7 @@
 }
 
 #answers ol li{
+
 	list-style:none;
 	line-height:50%;
 }

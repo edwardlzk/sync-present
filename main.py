@@ -44,7 +44,7 @@ class MainHandler(webapp2.RequestHandler):
         
     def generateSurvey(self):
         q = db.GqlQuery("SELECT * FROM Survey WHERE sid=1")
-        if(not q):
+        if q.count() == 0:
             a1 = Survey(sid=1,sname="What is your favorate programming language",aid=0,atext="PHP",count=0)
             a2 = Survey(sid=1,sname="What is your favorate programming language",aid=1,atext="Java",count=0)
             a3 = Survey(sid=1,sname="What is your favorate programming language",aid=2,atext="Python",count=0)
