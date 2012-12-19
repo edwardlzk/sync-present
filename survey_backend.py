@@ -20,3 +20,14 @@ class SurveyVote(webapp2.RequestHandler):
         obj = q.get()
         obj.count +=1
         obj.put()
+        
+#generate survey results for server to display
+class Result(webapp2.RequestHandler):
+    def get(self):
+        _sid = cgi.escape(self.request.get('sid'))
+        q = db.GqlQuery("SELECT count FROM Survey ORDER BY aid ASC")
+        total=[]
+        for aCount in q:
+            total.append(str(aCount.count))
+        self.response.out.write(",".join(total))
+        
