@@ -34,7 +34,10 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.generateSurvey()
         path = os.path.join(os.path.dirname(__file__), 'server.html')
-        self.response.out.write(template.render(path, None))
+        tmp_value = {
+            'url': os.path.join(os.path.dirname(__file__), 'client.html'),
+        }
+        self.response.out.write(template.render(path, tmp_value))
         
     def generateSurvey(self):
         q = db.GqlQuery("SELECT * FROM Survey WHERE sid=1")
