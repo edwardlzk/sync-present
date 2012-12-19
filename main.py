@@ -68,15 +68,7 @@ class Status(webapp2.RequestHandler):
         self.response.out.write("%s %s"%(memcache.get('hindex'), memcache.get('vindex')))
 
 
-#generate survey results for server to display
-class Result(webapp2.RequestHandler):
-    def get(self):
-        _sid = cgi.escape(self.request.get('sid'))
-        q = db.GqlQuery("SELECT count FROM Survey ORDER BY aid ASC")
-        total=[]
-        for aCount in q:
-            total.append(str(aCount.count))
-        self.response.out.write(",".join(total))
+
 
 app = webapp2.WSGIApplication([
     ('/server', MainHandler),
