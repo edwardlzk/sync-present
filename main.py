@@ -75,5 +75,7 @@ app = webapp2.WSGIApplication([
     ('/server_status', Status),
     ('/client', Client),
     ('/survey_vote', SurveyVote),
-    ('/survey_result', Result)
+    ('/survey_result', Result),
+    ('/presentation_admin', PAdmin),
+    ('/slides_content', SlidesContent)
 ], debug=True)
