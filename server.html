@@ -52,6 +52,16 @@
 						<small>Zekai Li</small>
 					</p>
 				</section>
+				
+				<section>
+					<h3>Presentation Syncronization</h3>
+					<p>
+            Send materials by email
+					</p>
+					<form>
+          <input type="button" class="roll" value="Click to Send" onclick="sendmail()" />
+          </form>					
+				</section>
 
 				<section>
 					<h2>Problems</h2>
@@ -395,6 +405,11 @@ function linkify( selector ) {
 		<script>
 			// Full list of configuration options available here:
 			// https://github.com/hakimel/reveal.js#configuration
+			function sendmail(){
+			$.get('/email');
+		  }
+			
+			
 			Reveal.initialize({
 				controls : true,
 				progress : true,
