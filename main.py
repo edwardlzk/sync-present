@@ -23,6 +23,7 @@ import webapp2
 import os
 import cgi
 import datetime
+import httplib
 from google.appengine.ext.webapp import template
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -34,10 +35,18 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.generateSurvey()
         path = os.path.join(os.path.dirname(__file__), 'server.html')
+        client_path = os.path.join(os.path.dirname(__file__), 'client.html')
+        conn = httplib.HTTPConnection("yep.it")
+        conn.request("GET", "/api.php?url=" + client_path)
+        res = conn.getresponse()
+        conn.close()
+        short_url = res.read()
         tmp_value = {
-            'url': os.path.join(os.path.dirname(__file__), 'client.html'),
+            'url': client_path,
+            'short_url' : short_url,
         }
         self.response.out.write(template.render(path, tmp_value))
+        self.response.out.write(short_url)
         
     def generateSurvey(self):
         q = db.GqlQuery("SELECT * FROM Survey WHERE sid=1")
