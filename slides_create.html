@@ -72,8 +72,8 @@
 		<!-- Le javascript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-		<script src="/js/jquery.js"></script>
 		<script src="/js/google-code-prettify/prettify.js"></script>
 		<script src="/js/bootstrap-transition.js"></script>
 		<script src="/js/bootstrap-alert.js"></script>
@@ -91,25 +91,24 @@
 		<script src="/js/application.js"></script>
 		
 		<script>
-			
-			<script>
+		
 var totalNum = 0;
 
 $("#addSlide").click(function(){
 	var selectType = $("#sType").find(":selected").val();
-        $("#addSlide").html("loading").attr("disabled", "disabled");
+   $("#addSlide").html("loading").attr("disabled", "disabled");
 	$.ajax({
-  url: "/slides_content?type="+selectType+"&num="+(totalNum+1),
-  cache: false,
-  success: function(html){
-    $("#sContainer").append(html);
-	totalNum++;
-	$("#sCounts").val(totalNum);
-	addSpec(totalNum);
-        $("#addSlide").html("Add Slide").removeAttr("disabled");
-  }
-}); 
-			
+  		url: "/slides_content?type="+selectType+"&num="+(totalNum+1),
+  		cache: false,
+  		success: function(html){
+    		$("#sContainer").append(html);
+			totalNum++;
+			$("#sCounts").val(totalNum);
+        	$("#addSlide").html("Add Slide").removeAttr("disabled");
+  		}
+	}); 
+});	
+
 		</script>
 
 	</body>
