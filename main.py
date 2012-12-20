@@ -30,6 +30,26 @@ from google.appengine.ext import db
 from google.appengine.api import users
 from survey_backend import  *
 from model import *
+from google.appengine.api import mail
+
+class SendEmail(webapp2.RequestHandler):
+  def get(self):
+    sender_addr = "lltree17@gmail.com"
+    result = db.GqlQuery("SELECT user_email FROM User WHERE pid=1")
+    user_email=""
+    for uemail in result:
+    	user_email=user_email+","+uemail.user_email
+    to_addr = user_email
+    if not mail.is_email_valid(to_addr):
+        # Return an error message...
+        pass
+    subject = "Thanks for attending the presentation"
+    body = """
+Thanks for attending the presentation
+Regards,
+
+""" 
+    mail.send_mail(sender_addr, to_addr, subject, body)
 
 #Handles the server-side requests
 class MainHandler(webapp2.RequestHandler):
@@ -37,8 +57,8 @@ class MainHandler(webapp2.RequestHandler):
         self.generateSurvey()
         path = os.path.join(os.path.dirname(__file__), 'server.html')
         client_path = os.path.join(os.path.dirname(__file__), 'client.html')
-        conn = httplib.HTTPConnection("yep.it")
-        conn.request("GET", "/api.php?url=" + client_path)
+        conn = httplib.HTTPConnection("is.gd")
+        conn.request("GET", "/create.php?format=simple&url=" + client_path)
         res = conn.getresponse()
         conn.close()
         short_url = res.read()
@@ -106,5 +126,6 @@ app = webapp2.WSGIApplication([
     ('/survey_vote', SurveyVote),
     ('/survey_result', Result),
     ('/presentation_admin', PAdmin),
-    ('/slides_content', SlidesContent)
+    ('/slides_content', SlidesContent),
+    ('/email',SendEmail)
 ], debug=True)
