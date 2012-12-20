@@ -13,3 +13,8 @@ class Survey(db.Model):
     aid = db.IntegerProperty();
     atext = db.StringProperty();
     count = db.IntegerProperty();
+
+class User(db.Model):
+    pid = db.IntegerProperty();
+    user_email = db.StringProperty();
+    user_nickname = db.StringProperty();
