@@ -20,3 +20,9 @@ indexes:
   - name: aid
     direction: desc
   - name: count
+
+- kind: Survey
+  properties:
+  - name: sid
+  - name: aid
+  - name: count

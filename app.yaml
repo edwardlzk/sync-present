@@ -20,6 +20,9 @@ handlers:
 
 - url: /lib
   static_dir: lib 
+  
+- url: /ckeditor
+  static_dir: ckeditor
 
 - url: .*
   script: main.app

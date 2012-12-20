@@ -127,5 +127,6 @@ app = webapp2.WSGIApplication([
     ('/survey_result', Result),
     ('/presentation_admin', PAdmin),
     ('/slides_content', SlidesContent),
-    ('/email',SendEmail)
+    ('/email',SendEmail),
+    ('/present_controller', PresentController)
 ], debug=True)

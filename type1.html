@@ -1,1 +1,15 @@
-{{type}}++++{{num}}
+<div class="slides" id="s{{num}}">
+{{num}}.
+<script>
+	var id = "s{{num}}content";
+	var instance = CKEDITOR.instances[id];
+    if(instance)
+    {
+        CKEDITOR.remove(instance);
+    }
+	CKEDITOR.replace( id );
+</script>
+<textarea rows="3" name="s{{num}}content" id="s{{num}}content">
+</textarea>
+<input type="hidden" name="s{{num}}type" id="s{{num}}type" value="1"/>
+</div>

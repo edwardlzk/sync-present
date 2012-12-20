@@ -1,0 +1,12 @@
+<div class="slides" id="s{{num}}">
+{{num}}.
+<input type="text" name="s{{num}}Title" placeholder="Slides Title">
+<div id="s{{num}}Choice">
+        
+ </div>
+
+    <button type="button" class="btn" onclick="addChoice({{num}})" id="s{{num}}Add">Add Choice</button>
+    <button type="button" class="btn" onclick="removeChoice({{num}})">Remove last</button>
+<input type="hidden" name="s{{num}}ChoiceNum" id="s{{num}}ChoiceNum" value="0"/>
+<input type="hidden" name="s{{num}}type" id="s{{num}}type" value="2"/>
+</div>
