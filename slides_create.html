@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Buzz</title>
+		<title>Create Slides</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<meta name="author" content="">
@@ -33,14 +33,10 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="brand" href="/">buzz.Zekai.Li</a>
 					<div class="nav-collapse collapse">
 						<ul class="nav">
 							<li class="active">
-								<a href="/">Search for buzz</a>
-							</li>
-							<li class="">
-								<a href="/result">Buzz Results</a>
+								<a href="/">Create a presentation</a>
 							</li>
 
 						</ul>
@@ -51,40 +47,23 @@
 
 		<div class="container">
 
-			<h1>Search for buzz</h1>
-			<form method="post">
-				<fieldset>
-					<legend>
-						Start your search
-					</legend>
-					<input type="text" name="words" placeholder="Key words">
-					<span class="help-block">You can type multiple keywords separated by spaces</span>
-					<button type="submit" class="btn">
-						Submit
-					</button>
-				</fieldset>
+			<h1>Create an presentation</h1>
+			<hr />
+			
+			<form  action="/present_controller" method="post">
+				<div id="sContainer"> </div>
+  
+  
+  				<select class="span2" name="sType" id="sType">
+    				<option value="1">Standard Slides</option>
+    				<option value="2">Survey Slides</option>
+  				</select>
+  				<input type="hidden" name="sCounts" id="sCounts" value="0"/>
+  				<button type="button" class="btn" id="addSlide">Add Slide</button>
+  				<a href="#" onClick="removelast()">remove last</a>
+  				<hr />
+  				<button type="submit" class="btn">Submit</button>
 			</form>
-			<hr/>
-			<div class="row-fluid">
-				{% if results %}
-				{% for r in results %}
-				<div class="tweets">
-					<div class="tweet_profile">
-						<img src="{{r.profile_image_url}}" width="48px">
-						<div class="tweets_name">
-							{{r.from_user}}
-						</div>
-					</div>
-					<div class="tweet_text">
-						{{r.text}}
-					</div>
-				</div>
-				{% endfor %}
-				{% else %}
-				No result;
-				{% endif %}
-			</div>
-
 		</div>
 
 		<!-- Footer
@@ -110,6 +89,28 @@
 		<script src="/js/bootstrap-typeahead.js"></script>
 		<script src="/js/bootstrap-affix.js"></script>
 		<script src="/js/application.js"></script>
+		
+		<script>
+			
+			<script>
+var totalNum = 0;
+
+$("#addSlide").click(function(){
+	var selectType = $("#sType").find(":selected").val();
+        $("#addSlide").html("loading").attr("disabled", "disabled");
+	$.ajax({
+  url: "/slides_content?type="+selectType+"&num="+(totalNum+1),
+  cache: false,
+  success: function(html){
+    $("#sContainer").append(html);
+	totalNum++;
+	$("#sCounts").val(totalNum);
+	addSpec(totalNum);
+        $("#addSlide").html("Add Slide").removeAttr("disabled");
+  }
+}); 
+			
+		</script>
 
 	</body>
 </html>

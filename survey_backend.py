@@ -5,6 +5,7 @@ import os
 import cgi
 import datetime
 from model import *
+from google.appengine.ext.webapp import template
 
 #Handles a vote from clients
 class SurveyVote(webapp2.RequestHandler):
@@ -30,4 +31,19 @@ class Result(webapp2.RequestHandler):
         for aCount in q:
             total.append(str(aCount.count))
         self.response.out.write(",".join(total))
-        
+
+
+class SlidesContent(webapp2.RequestHandler):
+    def get(self):
+        type = cgi.escape(self.request.get('type'))
+        num = cgi.escape(self.request.get('num'))
+        data = {}
+        data['type'] = type
+        data['num'] = num
+        path = os.path.join(os.path.dirname(__file__), 'type'+type+'.html')
+        self.response.out.write(template.render(path, data))
+
+class PAdmin(webapp2.RequestHandler):
+    def get(self):
+        path = os.path.join(os.path.dirname(__file__), 'slides_create.html')
+        self.response.out.write(template.render(path, None))
