@@ -27,6 +27,7 @@ import httplib
 from google.appengine.ext.webapp import template
 from google.appengine.api import memcache
 from google.appengine.ext import db
+from google.appengine.api import users
 from survey_backend import  *
 from model import *
 
@@ -63,8 +64,27 @@ class MainHandler(webapp2.RequestHandler):
 #Handles the client-side requests
 class Client(webapp2.RequestHandler):
     def get(self):
+        currentUser=''
+        url=''
+        url_linktext=''
+        if users.get_current_user():
+          allUser = User.all()
+          allUser.filter("user_email =",users.get_current_user().email()) 
+          if allUser.count() == 0:
+            newUser = User(pid=1,user_email=users.get_current_user().email(),user_nickname=users.get_current_user().nickname())
+            newUser.put()
+          currentUser=users.get_current_user().nickname()
+          url = users.create_logout_url(self.request.uri)
+          url_linktext = 'Logout'
+        else:
+          self.redirect(users.create_login_url(self.request.uri)) 
+        template_values = {
+          'currentUser': currentUser,
+          'url': url,
+          'url_linktext': url_linktext,
+        }   
         path = os.path.join(os.path.dirname(__file__), 'client.html')
-        self.response.out.write(template.render(path, None))        
+        self.response.out.write(template.render(path, template_values))        
 
 #Gives the current page of Server, used to synchronize between client and server
 class Status(webapp2.RequestHandler):
