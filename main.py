@@ -47,9 +47,8 @@ class SendEmail(webapp2.RequestHandler):
         pass
     subject = "Thanks for attending the presentation"
     body = """
-Thanks for attending the presentation
-Regards,
-
+Thanks for attending the presentation, Hope you have a great holiday!
+Regards
 """ 
     mail.send_mail(sender_addr, to_addr, subject, body)
 
