@@ -60,9 +60,9 @@ class MainHandler(webapp2.RequestHandler):
         if not pid:
             self.generateSurvey()
             
-            client_path = os.path.join(os.path.dirname(__file__), 'client')
+            client_path = "http://sync-present.appspot.com" + "/client?pid="+str(pid)
             conn = httplib.HTTPConnection("is.gd")
-            conn.request("GET", "/create.php?format=simple&url=" + client_path)
+            conn.request("GET",  cgi.escape("/create.php?format=simple&url=" + client_path))
             res = conn.getresponse()
             conn.close()
             short_url = res.read()
@@ -97,7 +97,7 @@ class MainHandler(webapp2.RequestHandler):
                     slides+=template.render(path, data)
             contents['pid']=pid
             contents['slides']=slides
-            client_path = os.path.join(os.path.dirname(__file__), '/client?pid='+str(pid))
+            client_path = "http://sync-present.appspot.com" + "/client?pid="+str(pid)
             conn = httplib.HTTPConnection("is.gd")
             #Generate QR code
             conn.request("GET", "/create.php?format=simple&url=" + client_path)
