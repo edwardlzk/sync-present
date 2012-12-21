@@ -145,10 +145,10 @@ class Client(webapp2.RequestHandler):
         else:
           self.redirect(users.create_login_url(self.request.uri)) 
         template_values = {
-          'currentUser': currentUser,
-          'url': url,
-          'url_linktext': url_linktext,
-        }   
+                  'currentUser': currentUser,
+                  'url': url,
+                  'url_linktext': url_linktext,
+                  }   
         if not pid :
             path = os.path.join(os.path.dirname(__file__), 'client.html')
             self.response.out.write(template.render(path, template_values))
