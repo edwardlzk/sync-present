@@ -10,14 +10,14 @@ from google.appengine.ext.webapp import template
 #Handles a vote from clients
 class SurveyVote(webapp2.RequestHandler):
     def get(self):
-        _pid = cgi.escape(self.request.get('pid'))
+        _sid = cgi.escape(self.request.get('sid'))
         _aid = cgi.escape(self.request.get('aid'))
-        vote = Vote(sid=int(_pid),
+        vote = Vote(sid=int(_sid),
                     aid=int(_aid),
                     user_nickname="test",
                     time=datetime.datetime.now())
         vote.put()
-        q = db.GqlQuery("SELECT * FROM Survey WHERE sid="+_pid+" AND aid="+_aid)
+        q = db.GqlQuery("SELECT * FROM Survey WHERE sid="+_sid+" AND aid="+_aid)
         obj = q.get()
         obj.count +=1
         obj.put()
@@ -88,8 +88,4 @@ class PresentController(webapp2.RequestHandler):
                              atext=choiceText,
                              count=0)
                     obj.put()
-            
-                    
-                
-                
-            
+    #def get(self):

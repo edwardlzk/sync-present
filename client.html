@@ -408,10 +408,10 @@ function linkify( selector ) {
 			});
 		}
 		
-		function sendResult(pid, aid){
+		function sendResult(sid, aid){
 			var replaceText = "Thanks for your vote";
 			
-			$.get('/survey_vote?pid='+pid+'&aid='+aid, function(data) {
+			$.get('/survey_vote?sid='+sid+'&aid='+aid, function(data) {
 				//$('#answers').replaceWith(replaceText)
 			});
 		}

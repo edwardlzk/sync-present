@@ -1,0 +1,17 @@
+<section>
+	<h2>Survey</h2>
+	<p>
+		<h4>{{title}}</h4>
+		<div id="answers">
+			<ol>
+				{% for a in survey %}
+				<li>
+					<button class="roll" onclick="sendResult({{sid}},{{a.aid}})">
+						{{a.atext}}
+					</button>
+				</li>
+				{% endfor %}
+			</ol>
+		</div>
+	</p>
+</section>

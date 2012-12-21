@@ -127,6 +127,7 @@ class Client(webapp2.RequestHandler):
         url=''
         url_linktext=''
         if users.get_current_user():
+            #add pid filtering
           allUser = User.all()
           allUser.filter("user_email =",users.get_current_user().email()) 
           if allUser.count() == 0:
@@ -158,16 +159,18 @@ class Client(webapp2.RequestHandler):
                     path = os.path.join(os.path.dirname(__file__), 'type1_display.html')
                     slides+=template.render(path, data)
                 elif type == 2:
-                    #TODO
                     sid=s.key().id()
                     survey = db.GqlQuery("SELECT * FROM Survey WHERE sid="+str(sid)+" ORDER BY aid ASC")
                     first = survey.get()
                     data['survey'] = survey.run()
                     data['sid'] = sid
                     data['title'] = first.sname
-                    data['init_data']=','.join(['0']*survey.count())
-                    path = os.path.join(os.path.dirname(__file__), 'type2_display_server.html')
+                    path = os.path.join(os.path.dirname(__file__), 'type2_display_client.html')
                     slides+=template.render(path, data)
+            template_values['pid']=pid
+            template_values['slides']=slides
+            path = os.path.join(os.path.dirname(__file__), 'client_dynamic.html')
+            self.response.out.write(template.render(path, template_values))
 
 #Gives the current page of Server, used to synchronize between client and server
 class Status(webapp2.RequestHandler):
