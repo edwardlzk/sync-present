@@ -60,9 +60,9 @@ class MainHandler(webapp2.RequestHandler):
         if not pid:
             self.generateSurvey()
             
-            client_path = "http://sync-present.appspot.com" + "/client?pid="+str(pid)
+            client_path = "http://sync-present.appspot.com" + "/client"
             conn = httplib.HTTPConnection("is.gd")
-            conn.request("GET",  cgi.escape("/create.php?format=simple&url=" + client_path))
+            conn.request("GET",  "/create.php?format=simple&url=" + client_path)
             res = conn.getresponse()
             conn.close()
             short_url = res.read()
