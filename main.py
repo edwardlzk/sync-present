@@ -24,6 +24,8 @@ import os
 import cgi
 import datetime
 import httplib
+from urllib import urlencode
+import logging
 from google.appengine.ext.webapp import template
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -62,6 +64,7 @@ class MainHandler(webapp2.RequestHandler):
             conn = httplib.HTTPConnection("is.gd")
             conn.request("GET", "/create.php?format=simple&url=" + client_path + "?" + urlencode({'pid': pid}))
             res = conn.getresponse()
+            logging.info(res)
             conn.close()
             short_url = res.read()
             tmp_value = {
