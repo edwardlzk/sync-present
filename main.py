@@ -67,7 +67,7 @@ class MainHandler(webapp2.RequestHandler):
             res = conn.getresponse()
             conn.close()
             #short_url = res.read()
-            short_url = urllib.urlopen("http://is.gd/create.php?format=simple&url=http://sync-present.appspot.com/client").read()
+            short_url = "http://is.gd/vSHaDx"
             tmp_value = {
                 'url': client_path,
                 'short_url' : short_url,
@@ -97,7 +97,6 @@ class MainHandler(webapp2.RequestHandler):
                     data['init_data']=','.join(['0']*survey.count())
                     path = os.path.join(os.path.dirname(__file__), 'type2_display_server.html')
                     slides+=template.render(path, data)
-            contents['pid']=pid
             contents['slides']=slides
             client_path = "http://sync-present.appspot.com" + "/client?pid=" + pid
             conn = httplib.HTTPConnection("is.gd")
@@ -106,6 +105,7 @@ class MainHandler(webapp2.RequestHandler):
             res = conn.getresponse()
             conn.close()
             short_url = res.read()
+            contents['pid'] = pid
             contents['url'] = client_path
             contents['short_url'] = short_url
             path = os.path.join(os.path.dirname(__file__), 'server_dynamic.html')
