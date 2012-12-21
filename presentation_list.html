@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Create Slides</title>
+		<title>Presentation List</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<meta name="author" content="">
@@ -51,24 +51,31 @@
 
 		<div class="container">
 
-			<h1>Create an presentation</h1>
+			<h1>Presentation List</h1>
 			<hr />
-			
-			<form  action="/present_controller" method="post">
-				<div id="sContainer"> </div>
-  
-  <hr />
-  				<select class="span3" name="sType" id="sType">
-    				<option value="1">Standard Slides</option>
-    				<option value="2">Survey Slides</option>
-  				</select>
-  				<input type="hidden" name="sCounts" id="sCounts" value="0"/>
-  				
-  				<button type="button" class="btn" id="addSlide">Add Slide</button>
-  				<button type="button" class="btn" onClick="removelast()">remove last</button>
-  				<hr />
-  				<button type="submit" class="btn">Submit</button>
-			</form>
+			<table class="table table-hover">
+				<thead>
+                <tr>
+                  <th>#</th>
+                  <th>Created Time</th>
+                  <th>Number of audience</th>
+                  <th>Links</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%for p in presentation%}
+                <tr>
+                  <td>{{p.pid}}</td>
+                  <td>{{p.time}}</td>
+                  <td>{{p.user_count}}</td>
+                  <td>
+							<a href="/server?pid={{p.pid}}">Server</a> 
+							| <a href="/client?pid={{p.pid}}">Client</a> 
+						</td>
+                </tr>
+                {%endfor%}
+              </tbody>
+			</table>
 		</div>
 
 		<!-- Footer
