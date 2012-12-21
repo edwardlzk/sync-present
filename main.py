@@ -24,6 +24,7 @@ import os
 import cgi
 import datetime
 import httplib
+import urllib
 from urllib import urlencode
 import logging
 from google.appengine.ext.webapp import template
@@ -60,12 +61,13 @@ class MainHandler(webapp2.RequestHandler):
         if not pid:
             self.generateSurvey()
             
-            client_path = "http://sync-present.appspot.com" + "/client"
+            client_path = "http://sync-present.appspot.com/client"
             conn = httplib.HTTPConnection("is.gd")
             conn.request("GET",  "/create.php?format=simple&url=" + client_path)
             res = conn.getresponse()
             conn.close()
-            short_url = res.read()
+            #short_url = res.read()
+            short_url = urllib.urlopen("http://is.gd/create.php?format=simple&url=http://sync-present.appspot.com/client").read()
             tmp_value = {
                 'url': client_path,
                 'short_url' : short_url,
@@ -97,7 +99,7 @@ class MainHandler(webapp2.RequestHandler):
                     slides+=template.render(path, data)
             contents['pid']=pid
             contents['slides']=slides
-            client_path = "http://sync-present.appspot.com" + "/client?pid="+str(pid)
+            client_path = "http://sync-present.appspot.com" + "/client?pid=" + pid
             conn = httplib.HTTPConnection("is.gd")
             #Generate QR code
             conn.request("GET", "/create.php?format=simple&url=" + client_path)
