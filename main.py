@@ -58,9 +58,9 @@ class MainHandler(webapp2.RequestHandler):
         if not pid:
             self.generateSurvey()
             
-            client_path = os.path.join(os.path.dirname(__file__), 'client.html')
+            client_path = os.path.join(os.path.dirname(__file__), 'client')
             conn = httplib.HTTPConnection("is.gd")
-            conn.request("GET", "/create.php?format=simple&url=" + client_path)
+            conn.request("GET", "/create.php?format=simple&url=" + client_path + "?" + urlencode({'pid': pid}))
             res = conn.getresponse()
             conn.close()
             short_url = res.read()
