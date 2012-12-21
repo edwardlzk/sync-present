@@ -24,6 +24,8 @@ import os
 import cgi
 import datetime
 import httplib
+from urllib import urlencode
+import logging
 from google.appengine.ext.webapp import template
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -58,7 +60,7 @@ class MainHandler(webapp2.RequestHandler):
         if not pid:
             self.generateSurvey()
             
-            client_path = os.path.join(os.path.dirname(__file__), 'client.html')
+            client_path = os.path.join(os.path.dirname(__file__), 'client')
             conn = httplib.HTTPConnection("is.gd")
             conn.request("GET", "/create.php?format=simple&url=" + client_path)
             res = conn.getresponse()
@@ -97,6 +99,7 @@ class MainHandler(webapp2.RequestHandler):
             contents['slides']=slides
             client_path = os.path.join(os.path.dirname(__file__), '/client?pid='+str(pid))
             conn = httplib.HTTPConnection("is.gd")
+            #Generate QR code
             conn.request("GET", "/create.php?format=simple&url=" + client_path)
             res = conn.getresponse()
             conn.close()
@@ -104,8 +107,9 @@ class MainHandler(webapp2.RequestHandler):
             contents['url'] = client_path
             contents['short_url'] = short_url
             path = os.path.join(os.path.dirname(__file__), 'server_dynamic.html')
+            #Rendering
             self.response.out.write(template.render(path, contents))
-            self.response.out.write(short_url)
+            #self.response.out.write(short_url)
         
     def generateSurvey(self):
         q = db.GqlQuery("SELECT * FROM Survey WHERE sid=1")
