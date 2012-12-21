@@ -10,6 +10,11 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Slides
+  properties:
+  - name: pid
+  - name: order
+
 - kind: Survey
   properties:
   - name: aid
@@ -20,6 +25,11 @@ indexes:
   - name: aid
     direction: desc
   - name: count
+
+- kind: Survey
+  properties:
+  - name: sid
+  - name: aid
 
 - kind: Survey
   properties:

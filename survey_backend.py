@@ -63,7 +63,7 @@ class PresentController(webapp2.RequestHandler):
             type = int(cgi.escape(self.request.get('s'+str(i)+'type')))
             if type == 1:
                 #Standard slides
-                content = cgi.escape(self.request.get('s'+str(i)+'content'))
+                content = self.request.get('s'+str(i)+'content')
                 s=Slides(pid=_pid,
                          stype=type,
                          scontent=content,

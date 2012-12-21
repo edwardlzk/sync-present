@@ -1,0 +1,84 @@
+<section>
+		<h2>{{title}}</h2>
+		<p>
+			<div id="slide{{sid}}"></div>
+		</p>
+</section>
+
+<script>
+	var chart{{sid}};
+
+				
+				//Initiate the chart
+				chart{{sid}} = new Highcharts.Chart({
+					chart : {
+						renderTo : 'slide{{sid}}',
+						type : 'column',
+						events : {
+
+							load : function() {
+
+								// set up the updating of the chart each second
+								var series = this.series[0];
+								setInterval(function() {
+
+									$.get('/survey_result?sid={{sid}}', function(data) {
+										data = data.split(',');
+										for (var i = 0; i < data.length; i++) {
+											data[i] = parseInt(data[i]);
+											series.data[i].update(data[i]);
+										}
+									})
+								}, 1000);
+							}
+						}
+					},
+					title : {
+						text : '{{title}}'
+					},
+					subtitle : {
+						text : ''
+					},
+					xAxis : {
+						categories : [
+						{%for s in survey%}
+							'{{s.atext}}',
+						{%endfor%}
+						]
+					},
+					yAxis : {
+						min : 0,
+						title : {
+							text : 'Votes'
+						}
+					},
+					legend : {
+						layout : 'vertical',
+						backgroundColor : '#FFFFFF',
+						align : 'left',
+						verticalAlign : 'top',
+						x : 100,
+						y : 70,
+						floating : true,
+						shadow : true
+					},
+					tooltip : {
+						formatter : function() {
+							return '' + this.x + ': ' + this.y + ' votes';
+						}
+					},
+					plotOptions : {
+						column : {
+							pointPadding : 0.2,
+							borderWidth : 0
+						}
+					},
+					series : [{
+						name : 'Answer',
+						data : [
+						{{init_data}}]
+
+					}]
+				});
+	
+</script>

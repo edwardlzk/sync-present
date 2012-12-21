@@ -54,20 +54,58 @@ Regards,
 #Handles the server-side requests
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.generateSurvey()
-        path = os.path.join(os.path.dirname(__file__), 'server.html')
-        client_path = os.path.join(os.path.dirname(__file__), 'client.html')
-        conn = httplib.HTTPConnection("is.gd")
-        conn.request("GET", "/create.php?format=simple&url=" + client_path)
-        res = conn.getresponse()
-        conn.close()
-        short_url = res.read()
-        tmp_value = {
-            'url': client_path,
-            'short_url' : short_url,
-        }
-        self.response.out.write(template.render(path, tmp_value))
-        self.response.out.write(short_url)
+        pid = cgi.escape(self.request.get('pid'))
+        if not pid:
+            self.generateSurvey()
+            
+            client_path = os.path.join(os.path.dirname(__file__), 'client.html')
+            conn = httplib.HTTPConnection("is.gd")
+            conn.request("GET", "/create.php?format=simple&url=" + client_path)
+            res = conn.getresponse()
+            conn.close()
+            short_url = res.read()
+            tmp_value = {
+                'url': client_path,
+                'short_url' : short_url,
+                }
+            path = os.path.join(os.path.dirname(__file__), 'server.html')
+            self.response.out.write(template.render(path, tmp_value))
+            self.response.out.write(short_url)
+        else:
+            q = db.GqlQuery("SELECT * FROM Slides WHERE pid="+str(pid)+" ORDER BY order ASC")
+            slides=''
+            contents={}
+            for s in q.run():
+                type = s.stype
+                data={}
+                if type == 1:
+                    content=s.scontent
+                    data['content'] = content
+                    path = os.path.join(os.path.dirname(__file__), 'type1_display.html')
+                    slides+=template.render(path, data)
+                elif type == 2:
+                    sid=s.key().id()
+                    survey = db.GqlQuery("SELECT * FROM Survey WHERE sid="+str(sid)+" ORDER BY aid ASC")
+                    first = survey.get()
+                    data['survey'] = survey.run()
+                    data['sid'] = sid
+                    data['title'] = first.sname
+                    data['init_data']=','.join(['0']*survey.count())
+                    path = os.path.join(os.path.dirname(__file__), 'type2_display_server.html')
+                    slides+=template.render(path, data)
+            contents['pid']=pid
+            contents['slides']=slides
+            client_path = os.path.join(os.path.dirname(__file__), '/client?pid='+str(pid))
+            conn = httplib.HTTPConnection("is.gd")
+            conn.request("GET", "/create.php?format=simple&url=" + client_path)
+            res = conn.getresponse()
+            conn.close()
+            short_url = res.read()
+            contents['url'] = client_path
+            contents['short_url'] = short_url
+            path = os.path.join(os.path.dirname(__file__), 'server_dynamic.html')
+            self.response.out.write(template.render(path, contents))
+            self.response.out.write(short_url)
         
     def generateSurvey(self):
         q = db.GqlQuery("SELECT * FROM Survey WHERE sid=1")
@@ -84,6 +122,7 @@ class MainHandler(webapp2.RequestHandler):
 #Handles the client-side requests
 class Client(webapp2.RequestHandler):
     def get(self):
+        pid = cgi.escape(self.request.get('pid'))
         currentUser=''
         url=''
         url_linktext=''
@@ -103,18 +142,49 @@ class Client(webapp2.RequestHandler):
           'url': url,
           'url_linktext': url_linktext,
         }   
-        path = os.path.join(os.path.dirname(__file__), 'client.html')
-        self.response.out.write(template.render(path, template_values))        
+        if not pid :
+            path = os.path.join(os.path.dirname(__file__), 'client.html')
+            self.response.out.write(template.render(path, template_values))
+        else:
+            q = db.GqlQuery("SELECT * FROM Slides WHERE pid="+str(pid)+" ORDER BY order ASC")
+            slides=''
+            contents={}
+            for s in q.run():
+                type = s.stype
+                data={}
+                if type == 1:
+                    content=s.scontent
+                    data['content'] = content
+                    path = os.path.join(os.path.dirname(__file__), 'type1_display.html')
+                    slides+=template.render(path, data)
+                elif type == 2:
+                    #TODO
+                    sid=s.key().id()
+                    survey = db.GqlQuery("SELECT * FROM Survey WHERE sid="+str(sid)+" ORDER BY aid ASC")
+                    first = survey.get()
+                    data['survey'] = survey.run()
+                    data['sid'] = sid
+                    data['title'] = first.sname
+                    data['init_data']=','.join(['0']*survey.count())
+                    path = os.path.join(os.path.dirname(__file__), 'type2_display_server.html')
+                    slides+=template.render(path, data)
 
 #Gives the current page of Server, used to synchronize between client and server
 class Status(webapp2.RequestHandler):
     def get(self):
         hindex = cgi.escape(self.request.get('h'))
         vindex = cgi.escape(self.request.get('v'))
-        if(hindex):
-            memcache.set('hindex', hindex)
-            memcache.set('vindex', vindex)
-        self.response.out.write("%s %s"%(memcache.get('hindex'), memcache.get('vindex')))
+        pid = cgi.escape(self.request.get('pid'))
+        if not pid :
+            if(hindex):
+                memcache.set('hindex', hindex)
+                memcache.set('vindex', vindex)
+            self.response.out.write("%s %s"%(memcache.get('hindex'), memcache.get('vindex')))
+        else:
+            if(hindex):
+                memcache.set('hindex'+str(pid), hindex)
+                memcache.set('vindex'+str(pid), vindex)
+            self.response.out.write("%s %s"%(memcache.get('hindex'+str(pid)), memcache.get('vindex'+str(pid))))
 
 
 
