@@ -36,7 +36,7 @@ from google.appengine.api import mail
 
 class SendEmail(webapp2.RequestHandler):
   def get(self):
-    sender_addr = "lltree17@gmail.com"
+    sender_addr = "edwardlzk@gmail.com"
     result = db.GqlQuery("SELECT user_email FROM User WHERE pid=1")
     user_email=""
     for uemail in result:
@@ -205,5 +205,6 @@ app = webapp2.WSGIApplication([
     ('/presentation_admin', PAdmin),
     ('/slides_content', SlidesContent),
     ('/email',SendEmail),
-    ('/present_controller', PresentController)
+    ('/present_controller', PresentController),
+    ('/presentation_list', PresentationList)
 ], debug=True)

@@ -88,4 +88,20 @@ class PresentController(webapp2.RequestHandler):
                              atext=choiceText,
                              count=0)
                     obj.put()
+        self.redirect("/presentation_list")
     #def get(self):
+
+class PresentationList(webapp2.RequestHandler):
+    def get(self):
+        q = db.GqlQuery("SELECT * FROM Presentation ORDER BY time DESC")
+        data = {}
+        list = []
+        for p in q.run():
+            current = {}
+            current['pid'] = p.key().id()
+            current['time'] = p.time
+            current['user_count'] = p.user_count
+            list.append(current)
+        data['presentation'] = list
+        path = os.path.join(os.path.dirname(__file__), 'presentation_list.html')
+        self.response.out.write(template.render(path, data))
